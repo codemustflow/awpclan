@@ -106,7 +106,7 @@ export function ServerInfo({ server, className, ...props }: ServerInfoProps) {
   };
 
   const { address } = server;
-  const iframeWidth = 340;
+  const iframeWidth = 400;
   const iframeHeight = 600;
 
   const iframeUrl = buildIframeUrl({
