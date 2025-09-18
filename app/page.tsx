@@ -1,7 +1,7 @@
 'use client';
 
 import { ServerInfo } from "@/components/ServerInfo";
-
+import { DiscordInvite } from "@/components/DiscordInvite";
 
 export default function CounterStrikeServers() {
   const servers = [
@@ -30,13 +30,17 @@ export default function CounterStrikeServers() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-
+      <main className="container mx-auto px-4 py-12 space-y-16">
         {/* Server Grid */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {servers.map((server, index) => (
             <ServerInfo key={index} server={server}  />
           ))}
+        </div>
+
+        {/* Discord Section */}
+        <div className="max-w-2xl mx-auto">
+          <DiscordInvite />
         </div>
       </main>
     </div>
