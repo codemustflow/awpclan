@@ -1,70 +1,106 @@
-import Image from 'next/image';
+'use client';
 
-export default function Home() {
+import { Clock, MapPin, Play } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default function CounterStrikeServers() {
+  const handleServerConnect = (serverAddress: string) => {
+    window.location.href = `steam://connect/${serverAddress}`;
+  };
+
+  const servers = [
+    {
+      name: 'AWPClan Crackhouse',
+      map: 'cs_crackhouse_awpclan_v12',
+      address: '74.91.116.8:27015',
+      ping: '45ms',
+      status: 'online',
+      description: 'Non-stop action on the classic Crackhouse map',
+    },
+    {
+      name: 'AWPClan Iceworld',
+      map: 'fy_iceworld_arena',
+      address: '74.91.116.78:27015',
+      ping: '32ms',
+      status: 'online',
+      description: 'Fast-paced combat in the frozen wasteland',
+    },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image className="dark:invert" src="/next.svg" alt="Next.js logo" width={180} height={38} priority />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">{'AWPClan Servers'}</h1>
+              <p className="text-muted-foreground mt-1">{'Elite Counter-Strike: Source gaming experience'}</p>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image className="dark:invert" src="/vercel.svg" alt="Vercel logomark" width={20} height={20} />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-balance mb-4">{'Ready to dominate?'}</h2>
+          <p className="text-xl text-muted-foreground text-balance max-w-2xl mx-auto">
+            {
+              'Click the launch buttons below to connect directly through Steam and join the action on our premium AWPClan servers.'
+            }
+          </p>
+        </div>
+
+        {/* Server Grid */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {servers.map((server, index) => (
+            <Card key={index} className="bg-card border-border hover:border-primary/50 transition-colors">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle className="text-xl text-card-foreground">{server.name}</CardTitle>
+                    <CardDescription className="text-muted-foreground mt-1">{server.description}</CardDescription>
+                  </div>
+                  <Badge
+                    variant={server.status === 'online' ? 'default' : 'secondary'}
+                    className="bg-primary text-primary-foreground"
+                  >
+                    {server.status.toUpperCase()}
+                  </Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-4">
+                {/* Server Info */}
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="w-4 h-4" />
+                    <span>{server.map}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    <span>{server.ping}</span>
+                  </div>
+                  <div className="text-muted-foreground font-mono text-xs col-span-2">{server.address}</div>
+                </div>
+
+                {/* Launch Button */}
+                <Button
+                  onClick={() => handleServerConnect(server.address)}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
+                  size="lg"
+                >
+                  <Play className="w-5 h-5 mr-2" />
+                  {'Launch Game & Connect'}
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
