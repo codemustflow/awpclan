@@ -100,6 +100,22 @@ export default function CounterStrikeServers() {
             </Card>
           ))}
         </div>
+        <div>
+          <iframe
+            src="https://cache.gametracker.com/components/html0/?host=74.91.116.8:27015&bgColor=333333&fontColor=cccccc&titleBgColor=222222&titleColor=ff9900&borderColor=555555&linkColor=ffcc00&borderLinkColor=222222&showMap=1&currentPlayersHeight=100&showCurrPlayers=1&topPlayersHeight=100&showTopPlayers=1&showBlogs=0&width=240"
+            width="240"
+            height="536"
+            title="Crackhouse"
+          ></iframe>
+        </div>
+        <div>
+          <iframe
+            src="https://cache.gametracker.com/components/html0/?host=74.91.116.78:27015&bgColor=333333&fontColor=cccccc&titleBgColor=222222&titleColor=ff9900&borderColor=555555&linkColor=ffcc00&borderLinkColor=222222&showMap=1&currentPlayersHeight=100&showCurrPlayers=1&topPlayersHeight=100&showTopPlayers=1&showBlogs=0&width=240"
+            width="240"
+            height="536"
+            title="Iceworld"
+          ></iframe>
+        </div>
       </main>
     </div>
   );
