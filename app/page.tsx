@@ -13,6 +13,10 @@ export default function CounterStrikeServers() {
       name: 'AWPClan Iceworld', 
       address: '74.91.116.78:27015',
     },
+    {
+      name: 'AWPClan Dust2/Office', 
+      address: '74.91.116.21:27015',
+    }
   ];
 
   return (
