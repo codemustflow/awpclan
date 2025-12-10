@@ -1,4 +1,3 @@
-import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +14,7 @@ interface DiscordInviteProps {
 
 export function DiscordInvite({ className }: DiscordInviteProps) {
   const handleDiscordJoin = () => {
-    window.open('https://discord.gg/deawpclan-515766761786703874', '_blank');
+    window.open("https://discord.gg/deawpclan-515766761786703874", "_blank");
   };
 
   return (
@@ -23,10 +22,10 @@ export function DiscordInvite({ className }: DiscordInviteProps) {
       <CardHeader className="text-center">
         <div className="flex justify-center mb-4">
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <Image 
-              src="/discord.svg" 
-              alt="Discord" 
-              width={32} 
+            <Image
+              src="/discord.svg"
+              alt="Discord"
+              width={32}
               height={32}
               className="w-8 h-8"
             />
