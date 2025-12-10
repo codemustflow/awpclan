@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { ServerInfo } from "@/components/ServerInfo";
 import { DiscordInvite } from "@/components/DiscordInvite";
@@ -6,17 +6,21 @@ import { DiscordInvite } from "@/components/DiscordInvite";
 export default function CounterStrikeServers() {
   const servers = [
     {
-      name: 'AWPClan Crackhouse',
-      address: '74.91.116.8:27015',
+      name: "AWPClan Crackhouse",
+      address: "74.91.116.8:27015",
     },
     {
-      name: 'AWPClan Iceworld', 
-      address: '74.91.116.78:27015',
+      name: "AWPClan Iceworld",
+      address: "74.91.116.78:27015",
     },
     {
-      name: 'AWPClan Dust2/Office', 
-      address: '74.91.116.21:27015',
-    }
+      name: "AWPClan Dust2/Office",
+      address: "74.91.116.21:27015",
+    },
+    {
+      name: "AWPClan Gungame",
+      address: "74.91.120.41:27015",
+    },
   ];
 
   return (
@@ -26,8 +30,12 @@ export default function CounterStrikeServers() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">{'Welcome to AWPClan'}</h1>
-              <p className="text-muted-foreground mt-1">{'Best Source Deathmatch experience in the world'}</p>
+              <h1 className="text-3xl font-bold text-foreground">
+                {"Welcome to AWPClan"}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                {"Best Source Deathmatch experience in the world"}
+              </p>
             </div>
           </div>
         </div>
@@ -38,7 +46,7 @@ export default function CounterStrikeServers() {
         {/* Server Grid */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {servers.map((server, index) => (
-            <ServerInfo key={index} server={server}  />
+            <ServerInfo key={index} server={server} />
           ))}
         </div>
 
