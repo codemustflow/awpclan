@@ -66,13 +66,13 @@ export default function CounterStrikeServers() {
               <nav className="hidden md:flex items-center gap-6">
                 <button
                   onClick={() => window.open("https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com", "_blank")}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
                 >
                   Donate
                 </button>
                 <button
                   onClick={() => window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank")}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
                 >
                   Stats
                 </button>
