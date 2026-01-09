@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ServerInfo } from "@/components/ServerInfo";
 import { DiscordInvite } from "@/components/DiscordInvite";
 import { DiscordButton } from "@/components/DiscordButton";
+
 import Image from "next/image";
 import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -43,7 +44,7 @@ export default function CounterStrikeServers() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Image
-                  src="/images/awpclanlogo.png"
+                  src="/awpclanlogo.png"
                   alt="AWPClan Logo"
                   width={80}
                   height={80}
@@ -64,19 +65,13 @@ export default function CounterStrikeServers() {
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
                 <button
-                  onClick={() => handleMenuClick("About")}
+                  onClick={() => window.open("https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com", "_blank")}
                   className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
                 >
-                  About
+                  Donate
                 </button>
                 <button
-                  onClick={() => handleMenuClick("Bans")}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
-                >
-                  Bans
-                </button>
-                <button
-                  onClick={() => handleMenuClick("Stats")}
+                  onClick={() => window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank")}
                   className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
                 >
                   Stats
@@ -93,26 +88,7 @@ export default function CounterStrikeServers() {
                 ) : (
                   <Menu className="w-6 h-6" />
                 )}
-              </button>
-
-              {/*<div className="flex items-center gap-4">
-                <DiscordButton />
-                <Button
-                  onClick={handleDonations}
-                  className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-lg hover:shadow-primary/25 transition-all duration-200"
-                  size="lg"
-                >
-                  <Heart className="w-5 h-5 mr-2" />
-                  Support Us
-                </Button>
-              </div>*/}
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                {"Welcome to AWPClan"}
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                {"Best Source Deathmatch experience in the world"}
-              </p>
+</button>
             </div>
           </div>
 
