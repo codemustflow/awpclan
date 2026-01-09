@@ -28,6 +28,10 @@ export default function CounterStrikeServers() {
       name: "AWPClan Dust2/Office",
       address: "74.91.116.21:27015",
     },
+    {
+      name: "AWPClan Gungame",
+      address: "74.91.120.41:27015",
+    },
   ];
 
   return (
@@ -102,6 +106,13 @@ export default function CounterStrikeServers() {
                   Support Us
                 </Button>
               </div>*/}
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">
+                {"Welcome to AWPClan"}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                {"Best Source Deathmatch experience in the world"}
+              </p>
             </div>
           </div>
 
