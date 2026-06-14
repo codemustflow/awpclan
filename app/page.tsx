@@ -96,15 +96,20 @@ export default function CounterStrikeServers() {
           {isMenuOpen && (
             <div className="md:hidden mt-6 pt-6 border-t border-border/30">
               <nav className="flex flex-col gap-4">
-                
                 <button
-                  onClick={() => handleMenuClick("Bans")}
+                  onClick={() => {
+                    window.open("https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com", "_blank");
+                    handleMenuClick("Donate");
+                  }}
                   className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
                 >
-                  Bans
+                  Donate
                 </button>
                 <button
-                  onClick={() => handleMenuClick("Stats")}
+                  onClick={() => {
+                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank");
+                    handleMenuClick("Stats");
+                  }}
                   className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
                 >
                   Stats
