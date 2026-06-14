@@ -25,14 +25,6 @@ export default function CounterStrikeServers() {
       name: "AWPClan Iceworld",
       address: "74.91.116.78:27015",
     },
-    {
-      name: "AWPClan Dust2/Office",
-      address: "74.91.116.21:27015",
-    },
-    {
-      name: "AWPClan Gungame",
-      address: "74.91.120.41:27015",
-    },
   ];
 
   return (
@@ -65,13 +57,23 @@ export default function CounterStrikeServers() {
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
                 <button
-                  onClick={() => window.open("https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com", "_blank")}
+                  onClick={() =>
+                    window.open(
+                      "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
+                      "_blank",
+                    )
+                  }
                   className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
                 >
                   Donate
                 </button>
                 <button
-                  onClick={() => window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank")}
+                  onClick={() =>
+                    window.open(
+                      "http://crackhouse.stats-ps3.nfoservers.com/",
+                      "_blank",
+                    )
+                  }
                   className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
                 >
                   Stats
@@ -88,7 +90,7 @@ export default function CounterStrikeServers() {
                 ) : (
                   <Menu className="w-6 h-6" />
                 )}
-</button>
+              </button>
             </div>
           </div>
 
