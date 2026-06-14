@@ -26,10 +26,6 @@ export default function CounterStrikeServers() {
       address: "74.91.116.78:27015",
     },
     {
-      name: "AWPClan Dust2/Office",
-      address: "74.91.116.21:27015",
-    },
-    {
       name: "AWPClan Gungame",
       address: "74.91.120.41:27015",
     },
