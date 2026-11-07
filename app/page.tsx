@@ -5,7 +5,6 @@ import Image, { getImageProps } from "next/image";
 import { useState } from "react";
 
 import { ServerInfo } from "@/components/ServerInfo";
-import { cn } from "@/lib/utils";
 
 const DISCORD_URL = "https://discord.gg/deawpclan-515766761786703874";
 
@@ -19,39 +18,50 @@ const NAV_LINKS = [
   { label: "Discord", href: DISCORD_URL, icon: "/discord.svg" },
 ];
 
-// The server grid's max width; the side art fills the gutters on either side of it.
+// The server grid's max width.
 const GRID_MAX_WIDTH = "56rem";
-// Each side figure spans its gutter plus the 2rem it's shifted off-screen, so it
-// ends exactly at the grid's edge. Also used as the image `sizes`.
-const SIDE_ART_WIDTH = `calc((100vw - ${GRID_MAX_WIDTH}) / 2 + 2rem)`;
+
+// Side art height (short enough that its top stays below the desktop header).
+const SIDE_ART_HEIGHT = "72vh";
+// How far each figure may reach in from the screen edge: the empty space beside the
+// grid plus up to 5rem behind the cards' outer edge.
+const SIDE_ART_ROOM = `((100vw - ${GRID_MAX_WIDTH}) / 2 + 5rem)`;
 
 // Shown below xl, where the side art is hidden, so those viewports download nothing.
 const BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
-// Side art is often the LCP on desktop, so it loads eagerly. A plain eager <Image>
-// would also download on viewports where it's display:none; the xl-only <source>
-// limits the download to viewports that show it.
+// Side art is sized by height (width follows the image's aspect ratio), so the
+// figures stand tall beside the cards. It's often the LCP on desktop, so it loads eagerly. A plain
+// eager <Image> would also download on viewports where it's display:none; the
+// xl-only <source> limits the download to viewports that show it.
 function SideArt({
   src,
-  className,
-  imgClassName,
+  width,
+  height,
+  side,
 }: {
   src: string;
-  className: string;
-  imgClassName: string;
+  width: number;
+  height: number;
+  side: "left" | "right";
 }) {
   const {
-    props: { srcSet, sizes, src: fullSrc, ...img },
-  } = getImageProps({ src, alt: "", fill: true, sizes: SIDE_ART_WIDTH, loading: "eager" });
+    props: { srcSet, src: fullSrc, ...img },
+  } = getImageProps({ src, alt: "", width, height, loading: "eager" });
 
   return (
     <picture
-      className={cn("pointer-events-none fixed bottom-0 hidden h-[95vh] xl:block", className)}
-      style={{ width: SIDE_ART_WIDTH }}
+      className="pointer-events-none fixed bottom-0 hidden xl:block"
+      style={{
+        height: SIDE_ART_HEIGHT,
+        // Push the figure off the screen edge (at least 2rem) so it doesn't reach
+        // further in than SIDE_ART_ROOM, cropping its outer side instead.
+        [side]: `min(-2rem, ${SIDE_ART_ROOM} - ${SIDE_ART_HEIGHT} * ${width / height})`,
+      }}
     >
       {/* No srcSet while images are unoptimized (next.config), so fall back to the plain src */}
-      <source media="(min-width: 1280px)" srcSet={srcSet ?? fullSrc} sizes={sizes} />
-      <img {...img} src={BLANK_GIF} alt="" className={cn("object-contain", imgClassName)} />
+      <source media="(min-width: 1280px)" srcSet={srcSet ?? fullSrc} />
+      <img {...img} src={BLANK_GIF} alt="" className="h-full w-auto max-w-none" />
     </picture>
   );
 }
@@ -75,8 +85,8 @@ export default function CounterStrikeServers() {
   return (
     <div className="min-h-screen">
       {/* Side figures: fill the gutters beside the server grid */}
-      <SideArt src="/girl-left.webp" className="-left-8" imgClassName="object-bottom-left" />
-      <SideArt src="/girl-right.webp" className="-right-8" imgClassName="object-bottom-right" />
+      <SideArt src="/girl-left.webp" width={644} height={1096} side="left" />
+      <SideArt src="/girl-right.webp" width={1218} height={2001} side="right" />
 
       {/* Header: sticky only from md up, so it doesn't eat a phone's viewport */}
       <header className="relative top-0 z-20 bg-linear-to-b from-black/45 to-black/25 shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_10px_40px_-10px_rgb(0_0_0/0.9)] backdrop-blur-xl backdrop-saturate-150 md:sticky">
