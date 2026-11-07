@@ -164,7 +164,7 @@ export function ServerInfo({ server }: ServerInfoProps) {
   });
 
   return (
-    <Card className="bg-card border-border hover:border-primary/50 transition-colors">
+    <Card className="relative border-transparent bg-transparent shadow-none transition-colors hover:border-primary/50">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -190,10 +190,11 @@ export function ServerInfo({ server }: ServerInfoProps) {
           )}
         </div>
 
-        {/* Launch Button */}
+        {/* Launch Button: its ::after stretches over the whole card (incl. the widget
+            iframe), so clicking anywhere on the card connects */}
         <Button
           onClick={() => handleServerConnect(server.address)}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 cursor-pointer after:absolute after:inset-0 after:rounded-xl"
           size="lg"
         >
           <Play className="w-5 h-5 mr-2" />
