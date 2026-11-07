@@ -35,7 +35,8 @@ export default function CounterStrikeServers() {
                   src="/awpclanlogo.png"
                   alt="AWPClan Logo"
                   width={80}
-                  height={80}
+                  height={84}
+                  loading="eager"
                   className="drop-shadow-2xl"
                 />
               </div>
@@ -122,7 +123,7 @@ export default function CounterStrikeServers() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12 space-y-16">
         {/* Server Grid */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {servers.map((server) => (
             <ServerInfo key={server.address} server={server} />
           ))}

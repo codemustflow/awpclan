@@ -1,4 +1,7 @@
+"use client";
+
 import { Play } from "lucide-react";
+import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,10 +99,44 @@ function handleServerConnect(serverAddress: string) {
   window.location.href = `steam://connect/${serverAddress}`;
 }
 
+// GameTracker renders the widget at exactly the requested pixel width, so we
+// request the width the card actually has (up to the widget's natural 400px).
+const MAX_WIDGET_WIDTH = 400;
+const WIDGET_HEIGHT = 600;
+// Each width change reloads the iframe, so wait until resizing settles.
+const RESIZE_DEBOUNCE_MS = 150;
+
+function debounce(fn: () => void, ms: number) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const debounced = () => {
+    clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  };
+  debounced.cancel = () => clearTimeout(timer);
+  return debounced;
+}
+
 export function ServerInfo({ server }: ServerInfoProps) {
   const { address } = server;
-  const iframeWidth = 400;
-  const iframeHeight = 600;
+  const [widgetWidth, setWidgetWidth] = useState<number | null>(null);
+
+  // React 19 ref callback with cleanup: observe the container while it's mounted.
+  const widgetContainerRef = useCallback((container: HTMLDivElement | null) => {
+    if (!container) return;
+    const fit = () =>
+      setWidgetWidth(
+        Math.min(MAX_WIDGET_WIDTH, Math.floor(container.getBoundingClientRect().width)),
+      );
+    fit();
+
+    const fitAfterResize = debounce(fit, RESIZE_DEBOUNCE_MS);
+    const observer = new ResizeObserver(fitAfterResize);
+    observer.observe(container);
+    return () => {
+      fitAfterResize.cancel();
+      observer.disconnect();
+    };
+  }, []);
 
   const iframeUrl = buildIframeUrl({
     address,
@@ -122,8 +159,8 @@ export function ServerInfo({ server }: ServerInfoProps) {
     showCurrPlayers: true,
     showTopPlayers: false,
     currentPlayersHeight: 400,
-    width: iframeWidth,
-    height: iframeHeight,
+    width: widgetWidth ?? MAX_WIDGET_WIDTH,
+    height: WIDGET_HEIGHT,
   });
 
   return (
@@ -138,13 +175,19 @@ export function ServerInfo({ server }: ServerInfoProps) {
 
       <CardContent className="space-y-4">
         {/* Server Info */}
-        <div className="flex justify-center">
-          <iframe
-            src={iframeUrl}
-            width={iframeWidth}
-            height={iframeHeight}
-            title="Crackhouse"
-          ></iframe>
+        <div
+          ref={widgetContainerRef}
+          className="flex justify-center overflow-hidden"
+          style={{ height: WIDGET_HEIGHT }}
+        >
+          {widgetWidth !== null && (
+            <iframe
+              src={iframeUrl}
+              width={widgetWidth}
+              height={WIDGET_HEIGHT}
+              title={`${server.name} server status`}
+            />
+          )}
         </div>
 
         {/* Launch Button */}
