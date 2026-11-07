@@ -1,20 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ServerInfo } from "@/components/ServerInfo";
-import { DiscordInvite } from "@/components/DiscordInvite";
-import { DiscordButton } from "@/components/DiscordButton";
-
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { DiscordInvite } from "@/components/DiscordInvite";
+import { ServerInfo } from "@/components/ServerInfo";
 
 export default function CounterStrikeServers() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleMenuClick = (item: string) => {
-    setIsMenuOpen(false);
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   const servers = [
     {
@@ -57,6 +52,7 @@ export default function CounterStrikeServers() {
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center gap-6">
                 <button
+                  type="button"
                   onClick={() =>
                     window.open(
                       "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
@@ -68,6 +64,7 @@ export default function CounterStrikeServers() {
                   Donate
                 </button>
                 <button
+                  type="button"
                   onClick={() =>
                     window.open(
                       "http://crackhouse.stats-ps3.nfoservers.com/",
@@ -82,6 +79,7 @@ export default function CounterStrikeServers() {
 
               {/* Mobile Menu Button */}
               <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden text-muted-foreground hover:text-primary transition-colors duration-200"
               >
@@ -99,18 +97,26 @@ export default function CounterStrikeServers() {
             <div className="md:hidden mt-6 pt-6 border-t border-border/30">
               <nav className="flex flex-col gap-4">
                 <button
+                  type="button"
                   onClick={() => {
-                    window.open("https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com", "_blank");
-                    handleMenuClick("Donate");
+                    window.open(
+                      "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
+                      "_blank",
+                    );
+                    closeMenu();
                   }}
                   className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
                 >
                   Donate
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
-                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank");
-                    handleMenuClick("Stats");
+                    window.open(
+                      "http://crackhouse.stats-ps3.nfoservers.com/",
+                      "_blank",
+                    );
+                    closeMenu();
                   }}
                   className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
                 >
@@ -126,8 +132,8 @@ export default function CounterStrikeServers() {
       <main className="container mx-auto px-4 py-12 space-y-16">
         {/* Server Grid */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {servers.map((server, index) => (
-            <ServerInfo key={index} server={server} />
+          {servers.map((server) => (
+            <ServerInfo key={server.address} server={server} />
           ))}
         </div>
 

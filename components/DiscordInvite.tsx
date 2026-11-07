@@ -1,18 +1,8 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-interface DiscordInviteProps {
-  className?: string;
-}
-
-export function DiscordInvite({ className }: DiscordInviteProps) {
+export function DiscordInvite() {
   const handleDiscordJoin = () => {
     window.open("https://discord.gg/deawpclan-515766761786703874", "_blank");
   };

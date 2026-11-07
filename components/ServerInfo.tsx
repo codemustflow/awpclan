@@ -1,13 +1,6 @@
-import { Clock, MapPin, Play } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Server {
   name: string;
@@ -16,35 +9,32 @@ interface Server {
 
 interface ServerInfoProps {
   server: Server;
-  className?: string;
 }
 
 interface RGBColor {
   r: number;
   g: number;
   b: number;
-  
+
   toString(): string;
 }
 
 function createRGBColor(r: number, g: number, b: number): RGBColor {
   if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-    throw new Error('RGB values must be between 0 and 255');
+    throw new Error("RGB values must be between 0 and 255");
   }
-  
+
   return {
     r,
     g,
     b,
-    
+
     toString(): string {
-      const toHex = (n: number) => n.toString(16).padStart(2, '0');
+      const toHex = (n: number) => n.toString(16).padStart(2, "0");
       return `${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`;
     },
-    
   };
 }
-
 
 interface IframeUrlParams {
   address: string;
@@ -100,7 +90,7 @@ function buildIframeUrl(params: IframeUrlParams) {
         height=${height}`;
 }
 
-export function ServerInfo({ server, className, ...props }: ServerInfoProps) {
+export function ServerInfo({ server }: ServerInfoProps) {
   const handleServerConnect = (serverAddress: string) => {
     window.location.href = `steam://connect/${serverAddress}`;
   };
