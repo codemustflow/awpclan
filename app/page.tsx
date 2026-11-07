@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+
 import { DiscordInvite } from "@/components/DiscordInvite";
 import { ServerInfo } from "@/components/ServerInfo";
 
@@ -66,10 +67,7 @@ export default function CounterStrikeServers() {
                 <button
                   type="button"
                   onClick={() =>
-                    window.open(
-                      "http://crackhouse.stats-ps3.nfoservers.com/",
-                      "_blank",
-                    )
+                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank")
                   }
                   className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
                 >
@@ -83,11 +81,7 @@ export default function CounterStrikeServers() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="md:hidden text-muted-foreground hover:text-primary transition-colors duration-200"
               >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
           </div>
@@ -112,10 +106,7 @@ export default function CounterStrikeServers() {
                 <button
                   type="button"
                   onClick={() => {
-                    window.open(
-                      "http://crackhouse.stats-ps3.nfoservers.com/",
-                      "_blank",
-                    );
+                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank");
                     closeMenu();
                   }}
                   className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"

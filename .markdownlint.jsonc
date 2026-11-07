@@ -1,0 +1,5 @@
+{
+  "default": true,
+  // Allow long lines (prose and tables shouldn't be hard-wrapped)
+  "MD013": false,
+}
