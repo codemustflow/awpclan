@@ -11,6 +11,23 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/iframe-missing-sandbox": "off"
+    "react/iframe-missing-sandbox": "off",
+    "better-tailwindcss/no-conflicting-classes": "error",
+    "better-tailwindcss/no-unknown-classes": "error",
+    "better-tailwindcss/no-concatenated-classes": "error",
+    "better-tailwindcss/no-duplicate-classes": "error",
+    "better-tailwindcss/enforce-canonical-classes": [
+      "error",
+      {
+        "collapse": false
+      }
+    ],
+    "better-tailwindcss/enforce-consistent-variant-order": "error"
+  },
+  "jsPlugins": ["eslint-plugin-better-tailwindcss"],
+  "settings": {
+    "better-tailwindcss": {
+      "entryPoint": "app/globals.css"
+    }
   }
 }

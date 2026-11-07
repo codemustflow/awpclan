@@ -26,7 +26,7 @@ export default function CounterStrikeServers() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/30 bg-gradient-to-r from-card/40 via-card/60 to-card/40 backdrop-blur-md">
+      <header className="border-b border-border/30 bg-linear-to-r from-card/40 via-card/60 to-card/40 backdrop-blur-md">
         <div className="container mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
@@ -40,7 +40,7 @@ export default function CounterStrikeServers() {
                 />
               </div>
               <div className="relative">
-                <h1 className="text-4xl font-bold text-foreground tracking-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
                   AWPClan
                 </h1>
                 <p className="text-muted-foreground text-lg font-medium">
