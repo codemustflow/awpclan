@@ -1,10 +1,12 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Image, { getImageProps } from "next/image";
+import Image from "next/image";
 import { useState } from "react";
 
 import { ServerInfo } from "@/components/ServerInfo";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const DISCORD_URL = "https://discord.gg/deawpclan-515766761786703874";
 
@@ -18,37 +20,64 @@ const NAV_LINKS = [
   { label: "Discord", href: DISCORD_URL, icon: "/discord.svg" },
 ];
 
-// The server grid's max width.
-const GRID_MAX_WIDTH = "56rem";
+type NavLinkItem = (typeof NAV_LINKS)[number];
+
+function NavLink({
+  link,
+  iconSize,
+  className,
+  onClick,
+}: {
+  link: NavLinkItem;
+  iconSize: number;
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 font-medium text-muted-foreground transition-colors duration-200 hover:text-primary",
+        className,
+      )}
+    >
+      {link.icon && <Image src={link.icon} alt="" width={iconSize} height={iconSize} />}
+      {link.label}
+    </a>
+  );
+}
 
 // Side art height (short enough that its top stays below the desktop header).
 const SIDE_ART_HEIGHT = "72vh";
 // How far each figure may reach in from the screen edge: the empty space beside the
-// grid plus up to 5rem behind the cards' outer edge.
-const SIDE_ART_ROOM = `((100vw - ${GRID_MAX_WIDTH}) / 2 + 5rem)`;
+// grid (max-w-4xl) plus up to 5rem behind the cards' outer edge. The art is
+// position: fixed, so 100% is the viewport width without the scrollbar, matching the
+// area the grid is centered in (100vw would include the scrollbar).
+const SIDE_ART_ROOM = "((100% - var(--container-4xl)) / 2 + 5rem)";
 
 // Shown below xl, where the side art is hidden, so those viewports download nothing.
 const BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
 // Side art is sized by height (width follows the image's aspect ratio), so the
-// figures stand tall beside the cards. It's often the LCP on desktop, so it loads eagerly. A plain
-// eager <Image> would also download on viewports where it's display:none; the
+// figures stand tall beside the cards. It's often the LCP on desktop, so it loads
+// eagerly. Images are unoptimized (next.config), so srcSet lists pre-exported widths
+// (full size and half size) and `sizes` lets the browser pick the one it needs. An
+// eager <img src> would also download on viewports where it's display:none; the
 // xl-only <source> limits the download to viewports that show it.
 function SideArt({
-  src,
+  srcSet,
   width,
   height,
   side,
 }: {
-  src: string;
+  srcSet: string;
   width: number;
   height: number;
   side: "left" | "right";
 }) {
-  const {
-    props: { srcSet, src: fullSrc, ...img },
-  } = getImageProps({ src, alt: "", width, height, loading: "eager" });
-
   return (
     <picture
       className="pointer-events-none fixed bottom-0 hidden xl:block"
@@ -59,9 +88,20 @@ function SideArt({
         [side]: `min(-2rem, ${SIDE_ART_ROOM} - ${SIDE_ART_HEIGHT} * ${width / height})`,
       }}
     >
-      {/* No srcSet while images are unoptimized (next.config), so fall back to the plain src */}
-      <source media="(min-width: 1280px)" srcSet={srcSet ?? fullSrc} />
-      <img {...img} src={BLANK_GIF} alt="" className="h-full w-auto max-w-none" />
+      <source
+        media="(min-width: 1280px)"
+        srcSet={srcSet}
+        sizes={`calc(${SIDE_ART_HEIGHT} * ${width / height})`}
+      />
+      <img
+        src={BLANK_GIF}
+        alt=""
+        width={width}
+        height={height}
+        loading="eager"
+        decoding="async"
+        className="h-full w-auto max-w-none"
+      />
     </picture>
   );
 }
@@ -85,8 +125,18 @@ export default function CounterStrikeServers() {
   return (
     <div className="min-h-screen">
       {/* Side figures: fill the gutters beside the server grid */}
-      <SideArt src="/girl-left.webp" width={644} height={1096} side="left" />
-      <SideArt src="/girl-right.webp" width={1218} height={2001} side="right" />
+      <SideArt
+        srcSet="/girl-left-322.webp 322w, /girl-left.webp 644w"
+        width={644}
+        height={1096}
+        side="left"
+      />
+      <SideArt
+        srcSet="/girl-right-609.webp 609w, /girl-right.webp 1218w"
+        width={1218}
+        height={2001}
+        side="right"
+      />
 
       {/* Header: sticky only from md up, so it doesn't eat a phone's viewport */}
       <header className="relative top-0 z-20 bg-linear-to-b from-black/45 to-black/25 shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_10px_40px_-10px_rgb(0_0_0/0.9)] backdrop-blur-xl backdrop-saturate-150 md:sticky">
@@ -100,12 +150,16 @@ export default function CounterStrikeServers() {
         <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-8">
           <div className="flex items-center justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3 sm:gap-6">
-              <Image
-                src="/awpclan-logo.webp"
+              {/* Plain <img>: images are unoptimized (next.config), so <Image> can't
+                  serve these pre-exported widths. */}
+              {/* oxlint-disable-next-line nextjs/no-img-element */}
+              <img
+                src="/awpclan-logo-480.webp"
+                srcSet="/awpclan-logo-240.webp 240w, /awpclan-logo-480.webp 480w, /awpclan-logo-720.webp 720w"
+                sizes="(min-width: 640px) 240px, 80px"
                 alt="AWP Clan logo"
                 width={240}
                 height={88}
-                sizes="(min-width: 640px) 240px, 80px"
                 loading="eager"
                 className="h-auto w-20 shrink-0 drop-shadow-2xl sm:w-60"
               />
@@ -122,18 +176,12 @@ export default function CounterStrikeServers() {
             {/* Desktop Navigation */}
             <nav className="hidden shrink-0 items-center gap-4 lg:flex xl:gap-6">
               {NAV_LINKS.map((link) => (
-                <a
+                <NavLink
                   key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-xl font-medium whitespace-nowrap xl:text-2xl text-muted-foreground transition-colors duration-200 hover:text-primary"
-                >
-                  {link.icon && (
-                    <Image src={link.icon} alt="" width={28} height={28} className="size-7" />
-                  )}
-                  {link.label}
-                </a>
+                  link={link}
+                  iconSize={28}
+                  className="text-xl whitespace-nowrap xl:text-2xl"
+                />
               ))}
             </nav>
 
@@ -152,19 +200,13 @@ export default function CounterStrikeServers() {
           {isMenuOpen && (
             <nav className="mt-4 flex flex-col gap-2 border-t border-border/30 pt-4 lg:hidden">
               {NAV_LINKS.map((link) => (
-                <a
+                <NavLink
                   key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  link={link}
+                  iconSize={20}
+                  className="py-2"
                   onClick={closeMenu}
-                  className="flex items-center gap-2 py-2 font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
-                >
-                  {link.icon && (
-                    <Image src={link.icon} alt="" width={20} height={20} className="size-5" />
-                  )}
-                  {link.label}
-                </a>
+                />
               ))}
             </nav>
           )}
@@ -174,13 +216,21 @@ export default function CounterStrikeServers() {
       {/* Main Content */}
       <main className="relative container mx-auto px-4 py-12">
         {/* Server Grid */}
-        <div
-          className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-2"
-          style={{ maxWidth: GRID_MAX_WIDTH }}
-        >
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
           {servers.map((server) => (
             <ServerInfo key={server.address} server={server} />
           ))}
+        </div>
+
+        {/* Discord call to action below lg, where the nav (and its Discord link) is
+            collapsed into the menu */}
+        <div className="mt-12 flex justify-center lg:hidden">
+          <Button asChild size="lg" className="font-semibold">
+            <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+              <Image src="/discord.svg" alt="" width={20} height={20} />
+              Join Discord Server
+            </a>
+          </Button>
         </div>
       </main>
     </div>
