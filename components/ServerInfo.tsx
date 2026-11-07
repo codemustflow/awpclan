@@ -1,4 +1,7 @@
+"use client";
+
 import { Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,10 +99,25 @@ function handleServerConnect(serverAddress: string) {
   window.location.href = `steam://connect/${serverAddress}`;
 }
 
+// GameTracker renders the widget at exactly the requested pixel width, so we
+// request the width the card actually has (up to the widget's natural 400px).
+const MAX_WIDGET_WIDTH = 400;
+const WIDGET_HEIGHT = 600;
+
 export function ServerInfo({ server }: ServerInfoProps) {
   const { address } = server;
-  const iframeWidth = 400;
-  const iframeHeight = 600;
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
+  const [widgetWidth, setWidgetWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const container = widgetContainerRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setWidgetWidth(Math.min(MAX_WIDGET_WIDTH, Math.floor(entry.contentRect.width)));
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const iframeUrl = buildIframeUrl({
     address,
@@ -122,8 +140,8 @@ export function ServerInfo({ server }: ServerInfoProps) {
     showCurrPlayers: true,
     showTopPlayers: false,
     currentPlayersHeight: 400,
-    width: iframeWidth,
-    height: iframeHeight,
+    width: widgetWidth ?? MAX_WIDGET_WIDTH,
+    height: WIDGET_HEIGHT,
   });
 
   return (
@@ -138,13 +156,19 @@ export function ServerInfo({ server }: ServerInfoProps) {
 
       <CardContent className="space-y-4">
         {/* Server Info */}
-        <div className="flex justify-center">
-          <iframe
-            src={iframeUrl}
-            width={iframeWidth}
-            height={iframeHeight}
-            title="Crackhouse"
-          ></iframe>
+        <div
+          ref={widgetContainerRef}
+          className="flex justify-center"
+          style={{ height: WIDGET_HEIGHT }}
+        >
+          {widgetWidth !== null && (
+            <iframe
+              src={iframeUrl}
+              width={widgetWidth}
+              height={WIDGET_HEIGHT}
+              title={`${server.name} server status`}
+            />
+          )}
         </div>
 
         {/* Launch Button */}
