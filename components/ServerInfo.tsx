@@ -1,7 +1,7 @@
 "use client";
 
-import { Play } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Check, Copy, Play } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -99,6 +99,50 @@ function handleServerConnect(serverAddress: string) {
   window.location.href = `steam://connect/${serverAddress}`;
 }
 
+const COPIED_FEEDBACK_MS = 1500;
+
+// Console command for players who'd rather paste than use the steam:// link.
+// Sits above the card's stretched launch overlay (relative z-10) so clicking it
+// copies instead of connecting.
+function CopyConnectCommand({ address }: { address: string }) {
+  const command = `connect ${address}`;
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), COPIED_FEEDBACK_MS);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+    } catch {
+      // Clipboard unavailable (insecure context or denied): the command stays visible to copy by hand.
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={copied ? "Copied connect command" : `Copy "${command}"`}
+      className="group relative z-10 flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+    >
+      <span className="truncate">{command}</span>
+      {copied ? (
+        <span className="flex shrink-0 items-center gap-1 text-primary">
+          <Check className="size-4" />
+          Copied
+        </span>
+      ) : (
+        <Copy className="size-4 shrink-0 transition-colors group-hover:text-primary" />
+      )}
+    </button>
+  );
+}
+
 // GameTracker renders the widget at exactly the requested pixel width, so we
 // request the width the card actually has (up to the widget's natural 400px).
 const MAX_WIDGET_WIDTH = 400;
@@ -189,6 +233,8 @@ export function ServerInfo({ server }: ServerInfoProps) {
             />
           )}
         </div>
+
+        <CopyConnectCommand address={address} />
 
         {/* Launch Button: its ::after stretches over the whole card (incl. the widget
             iframe), so clicking anywhere on the card connects */}
