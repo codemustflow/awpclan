@@ -35,7 +35,8 @@ export default function CounterStrikeServers() {
                   src="/awpclanlogo.png"
                   alt="AWPClan Logo"
                   width={80}
-                  height={80}
+                  height={84}
+                  loading="eager"
                   className="drop-shadow-2xl"
                 />
               </div>
