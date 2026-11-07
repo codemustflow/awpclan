@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AWPClan",
-  description: "AWPClan CSS Servers 100 tick",
+  title: "AWP Clan",
+  description: "24/7 CS:S deathmatch",
 };
 
 export default function RootLayout({
