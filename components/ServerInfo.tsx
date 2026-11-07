@@ -165,7 +165,10 @@ function CopyConnectCommand({ address }: { address: string }) {
       </div>
       {/* Live region: announces copies to screen readers; shown when copying fails */}
       <output
-        className={cn("block text-xs text-muted-foreground", status?.kind !== "failed" && "sr-only")}
+        className={cn(
+          "block text-xs text-muted-foreground",
+          status?.kind !== "failed" && "sr-only",
+        )}
       >
         {status?.kind === "copied" && "Copied connect command"}
         {status?.kind === "failed" &&
