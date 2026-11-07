@@ -101,9 +101,8 @@ function handleServerConnect(serverAddress: string) {
 
 const COPIED_FEEDBACK_MS = 1500;
 
-// Console command for players who'd rather paste than use the steam:// link.
-// Sits above the card's stretched launch overlay (relative z-10) so clicking it
-// copies instead of connecting.
+// Console command for players who'd rather paste than use the steam:// link,
+// and the only way to join from a phone, where steam:// links don't work.
 function CopyConnectCommand({ address }: { address: string }) {
   const command = `connect ${address}`;
   const [copied, setCopied] = useState(false);
@@ -128,7 +127,7 @@ function CopyConnectCommand({ address }: { address: string }) {
       type="button"
       onClick={copy}
       aria-label={copied ? "Copied connect command" : `Copy "${command}"`}
-      className="group relative z-10 flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+      className="group flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
     >
       <span className="truncate">{command}</span>
       {copied ? (
@@ -208,7 +207,7 @@ export function ServerInfo({ server }: ServerInfoProps) {
   });
 
   return (
-    <Card className="relative border-transparent bg-transparent shadow-none transition-colors hover:border-primary/50">
+    <Card className="border-transparent bg-transparent shadow-none transition-colors hover:border-primary/50">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -236,11 +235,10 @@ export function ServerInfo({ server }: ServerInfoProps) {
 
         <CopyConnectCommand address={address} />
 
-        {/* Launch Button: its ::after stretches over the whole card (incl. the widget
-            iframe), so clicking anywhere on the card connects */}
+        {/* Launch Button: hidden on phones, which can't open steam:// links */}
         <Button
           onClick={() => handleServerConnect(server.address)}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 cursor-pointer after:absolute after:inset-0 after:rounded-xl"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 cursor-pointer max-md:hidden"
           size="lg"
         >
           <Play className="w-5 h-5 mr-2" />

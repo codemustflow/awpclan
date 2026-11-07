@@ -39,13 +39,13 @@
 }
 
 @theme {
-  --animate-header-sheen: header-sheen 9s ease-in-out infinite;
+  /* Runs once: an endless loop would keep the header's backdrop blur re-compositing */
+  --animate-header-sheen: header-sheen 4s ease-in-out 0.5s both;
 
   @keyframes header-sheen {
     0% {
       transform: translateX(-150%) skewX(-12deg);
     }
-    45%,
     100% {
       transform: translateX(350%) skewX(-12deg);
     }

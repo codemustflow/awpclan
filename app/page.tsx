@@ -1,176 +1,162 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { useState } from "react";
 
 import { ServerInfo } from "@/components/ServerInfo";
+import { cn } from "@/lib/utils";
 
 const DISCORD_URL = "https://discord.gg/deawpclan-515766761786703874";
+
+const NAV_LINKS = [
+  {
+    label: "Donate",
+    href: "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
+  },
+  { label: "Stats", href: "http://crackhouse.stats-ps3.nfoservers.com/" },
+  { label: "Steam Group", href: "https://steamcommunity.com/groups/awp_public" },
+  { label: "Discord", href: DISCORD_URL, icon: "/discord.svg" },
+];
+
+// The server grid's max width; the side art fills the gutters on either side of it.
+const GRID_MAX_WIDTH = "56rem";
+// Each side figure spans its gutter plus the 2rem it's shifted off-screen, so it
+// ends exactly at the grid's edge. Also used as the image `sizes`.
+const SIDE_ART_WIDTH = `calc((100vw - ${GRID_MAX_WIDTH}) / 2 + 2rem)`;
+
+// Shown below xl, where the side art is hidden, so those viewports download nothing.
+const BLANK_GIF = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
+// Side art is often the LCP on desktop, so it loads eagerly. A plain eager <Image>
+// would also download on viewports where it's display:none; the xl-only <source>
+// limits the download to viewports that show it.
+function SideArt({
+  src,
+  className,
+  imgClassName,
+}: {
+  src: string;
+  className: string;
+  imgClassName: string;
+}) {
+  const {
+    props: { srcSet, sizes, src: fullSrc, ...img },
+  } = getImageProps({ src, alt: "", fill: true, sizes: SIDE_ART_WIDTH, loading: "eager" });
+
+  return (
+    <picture
+      className={cn("pointer-events-none fixed bottom-0 hidden h-[95vh] xl:block", className)}
+      style={{ width: SIDE_ART_WIDTH }}
+    >
+      {/* No srcSet while images are unoptimized (next.config), so fall back to the plain src */}
+      <source media="(min-width: 1280px)" srcSet={srcSet ?? fullSrc} sizes={sizes} />
+      <img {...img} src={BLANK_GIF} alt="" className={cn("object-contain", imgClassName)} />
+    </picture>
+  );
+}
+
+const servers = [
+  {
+    name: "Coronatown",
+    address: "74.91.116.8:27015",
+  },
+  {
+    name: "Iceworld",
+    address: "74.91.116.78:27015",
+  },
+];
 
 export default function CounterStrikeServers() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const servers = [
-    {
-      name: "Coronatown",
-      address: "74.91.116.8:27015",
-    },
-    {
-      name: "Iceworld",
-      address: "74.91.116.78:27015",
-    },
-  ];
-
   return (
     <div className="min-h-screen">
-      {/* Side figures: fill the gutters beside the server grid, overlapping its edges slightly */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed bottom-0 -left-8 hidden h-[95vh] w-[calc((100vw-56rem)/2+5rem)] xl:block"
-      >
-        <Image
-          src="/girl-left.webp"
-          loading="eager"
-          alt=""
-          fill
-          sizes="30vw"
-          className="object-contain object-bottom-left"
-        />
-      </div>
-      <div
-        aria-hidden
-        className="pointer-events-none fixed -right-8 bottom-0 hidden h-[95vh] w-[calc((100vw-56rem)/2+5rem)] xl:block"
-      >
-        <Image
-          src="/girl-right.webp"
-          loading="eager"
-          alt=""
-          fill
-          sizes="30vw"
-          className="object-contain object-bottom-right"
-        />
-      </div>
+      {/* Side figures: fill the gutters beside the server grid */}
+      <SideArt src="/girl-left.webp" className="-left-8" imgClassName="object-bottom-left" />
+      <SideArt src="/girl-right.webp" className="-right-8" imgClassName="object-bottom-right" />
 
-      {/* Header */}
-      <header className="sticky top-0 z-20 bg-linear-to-b from-black/45 to-black/25 shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_10px_40px_-10px_rgb(0_0_0/0.9)] backdrop-blur-xl backdrop-saturate-150">
-        {/* Slow light sheen sweeping across the glass */}
+      {/* Header: sticky only from md up, so it doesn't eat a phone's viewport */}
+      <header className="relative top-0 z-20 bg-linear-to-b from-black/45 to-black/25 shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_10px_40px_-10px_rgb(0_0_0/0.9)] backdrop-blur-xl backdrop-saturate-150 md:sticky">
+        {/* Light sheen that sweeps across the glass once on load */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute inset-y-0 left-0 w-1/3 animate-header-sheen bg-linear-to-r from-transparent via-white/6 to-transparent motion-reduce:hidden" />
         </div>
         {/* Gold hairline along the bottom edge, brightest in the middle */}
         <div className="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-primary/80 to-transparent" />
         <div className="absolute inset-x-0 -bottom-px h-4 translate-y-full bg-linear-to-b from-primary/10 to-transparent" />
-        <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <div className="relative">
-                <Image
-                  src="/awpclan-logo.webp"
-                  alt="AWPClan Logo"
-                  width={1200}
-                  height={438}
-                  loading="eager"
-                  className="h-auto w-36 drop-shadow-2xl sm:w-60"
-                />
-              </div>
-              <div className="relative">
-                <h1 className="text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                  AWPClan
+        <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-8">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3 sm:gap-6">
+              <Image
+                src="/awpclan-logo.webp"
+                alt="AWP Clan logo"
+                width={240}
+                height={88}
+                sizes="(min-width: 640px) 240px, 80px"
+                loading="eager"
+                className="h-auto w-20 shrink-0 drop-shadow-2xl sm:w-60"
+              />
+              <div className="min-w-0">
+                <h1 className="bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
+                  AWP Clan
                 </h1>
-                <p className="text-muted-foreground text-lg font-medium">
-                  Best Source DM experience in the world
+                <p className="text-sm font-medium text-muted-foreground sm:text-lg">
+                  24/7 CS:S deathmatch
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center gap-6">
-                <button
-                  type="button"
-                  onClick={() =>
-                    window.open(
-                      "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
-                      "_blank",
-                    )
-                  }
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
-                >
-                  Donate
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank")
-                  }
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
-                >
-                  Stats
-                </button>
+            {/* Desktop Navigation */}
+            <nav className="hidden shrink-0 items-center gap-4 lg:flex xl:gap-6">
+              {NAV_LINKS.map((link) => (
                 <a
-                  href={DISCORD_URL}
+                  key={link.href}
+                  href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-200 font-medium text-2xl"
+                  className="flex items-center gap-2 text-xl font-medium whitespace-nowrap xl:text-2xl text-muted-foreground transition-colors duration-200 hover:text-primary"
                 >
-                  <Image src="/discord.svg" alt="" width={28} height={28} className="size-7" />
-                  Discord
+                  {link.icon && (
+                    <Image src={link.icon} alt="" width={28} height={28} className="size-7" />
+                  )}
+                  {link.label}
                 </a>
-              </nav>
+              ))}
+            </nav>
 
-              {/* Mobile Menu Button */}
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden text-muted-foreground hover:text-primary transition-colors duration-200"
-              >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="shrink-0 text-muted-foreground transition-colors duration-200 hover:text-primary lg:hidden"
+            >
+              {isMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+            </button>
           </div>
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-6 pt-6 border-t border-border/30">
-              <nav className="flex flex-col gap-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.open(
-                      "https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=stormrendstudio%40gmail.com",
-                      "_blank",
-                    );
-                    closeMenu();
-                  }}
-                  className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
-                >
-                  Donate
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.open("http://crackhouse.stats-ps3.nfoservers.com/", "_blank");
-                    closeMenu();
-                  }}
-                  className="text-left text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
-                >
-                  Stats
-                </button>
+            <nav className="mt-4 flex flex-col gap-2 border-t border-border/30 pt-4 lg:hidden">
+              {NAV_LINKS.map((link) => (
                 <a
-                  href={DISCORD_URL}
+                  key={link.href}
+                  href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={closeMenu}
-                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
+                  className="flex items-center gap-2 py-2 font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
                 >
-                  <Image src="/discord.svg" alt="" width={20} height={20} className="size-5" />
-                  Discord
+                  {link.icon && (
+                    <Image src={link.icon} alt="" width={20} height={20} className="size-5" />
+                  )}
+                  {link.label}
                 </a>
-              </nav>
-            </div>
+              ))}
+            </nav>
           )}
         </div>
       </header>
@@ -178,7 +164,10 @@ export default function CounterStrikeServers() {
       {/* Main Content */}
       <main className="relative container mx-auto px-4 py-12">
         {/* Server Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div
+          className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-2"
+          style={{ maxWidth: GRID_MAX_WIDTH }}
+        >
           {servers.map((server) => (
             <ServerInfo key={server.address} server={server} />
           ))}
