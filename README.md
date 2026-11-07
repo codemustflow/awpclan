@@ -11,12 +11,12 @@ pnpm dev        # http://localhost:3000
 
 ## Scripts
 
-| Command | What it does |
-| --- | --- |
-| `pnpm dev` | Start the dev server |
-| `pnpm build` | Production build (also type-checks) |
-| `pnpm lint` | Lint with Biome |
-| `pnpm format` | Format with Biome |
+| Command       | What it does                        |
+| ------------- | ----------------------------------- |
+| `pnpm dev`    | Start the dev server                |
+| `pnpm build`  | Production build (also type-checks) |
+| `pnpm lint`   | Lint with oxlint                    |
+| `pnpm format` | Format with oxfmt                   |
 
 ## Editing
 
