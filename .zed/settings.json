@@ -1,21 +1,4 @@
 {
-  "lsp": {
-    "oxlint": {
-      "initialization_options": {
-        "settings": {
-          "run": "onType",
-          "fixKind": "safe_fix"
-        }
-      }
-    },
-    "oxfmt": {
-      "initialization_options": {
-        "settings": {
-          "run": "onSave"
-        }
-      }
-    }
-  },
   "languages": {
     "CSS": {
       "format_on_save": "on",
